@@ -23,7 +23,12 @@ if {[env_var_exists_and_non_empty VERILOG_INCLUDE_DIRS]} {
 
 
 # Read verilog files
-foreach file $::env(VERILOG_FILES) {
+if {[env_var_exists_and_non_empty VERILOG_FILE_GLOB]} {
+  set VERILOG_FILE_LIST [glob $::env(VERILOG_FILE_GLOB)]
+} else {
+  set VERILOG_FILE_LIST $::env(VERILOG_FILES)
+}
+foreach file $VERILOG_FILE_LIST {
   if {[file extension $file] == ".rtlil"} {
     read_rtlil $file
   } elseif {[file extension $file] == ".json"} {
